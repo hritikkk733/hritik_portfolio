@@ -1,233 +1,272 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { 
-  ArrowRight, 
+  ArrowDownRight, 
   FileText, 
   Mail, 
   MapPin, 
-  PhoneCall
+  PhoneCall,
+  Sparkles,
+  CheckCircle2,
+  Target,
+  Zap
 } from 'lucide-react';
-import { PERSONAL_INFO, STATS } from '../data/portfolioData';
+import { PERSONAL_INFO, ROLE_PITCHES, STATS } from '../data/portfolioData';
 import { TerminalWidget } from './TerminalWidget';
 import { GithubIcon, LinkedinIcon } from './Icons';
 
 interface HeroProps {
   onOpenResume: () => void;
+  isShortlisted: boolean;
+  onShortlistClick: () => void;
 }
 
-export const Hero: React.FC<HeroProps> = ({ onOpenResume }) => {
-  const titles = [
-    'Full Stack Web Developer',
-    'Next.js & React Specialist',
-    'AI & Backend Engineer',
-    'Enterprise Software Builder',
-  ];
-
-  const [titleIndex, setTitleIndex] = useState(0);
-  const [displayedText, setDisplayedText] = useState('');
-  const [isDeleting, setIsDeleting] = useState(false);
-
-  useEffect(() => {
-    const currentFullTitle = titles[titleIndex];
-    let typingSpeed = isDeleting ? 40 : 80;
-
-    if (!isDeleting && displayedText === currentFullTitle) {
-      const timeout = setTimeout(() => setIsDeleting(true), 1800);
-      return () => clearTimeout(timeout);
-    } else if (isDeleting && displayedText === '') {
-      setIsDeleting(false);
-      setTitleIndex((prev) => (prev + 1) % titles.length);
-      return;
-    }
-
-    const timer = setTimeout(() => {
-      setDisplayedText(
-        currentFullTitle.substring(0, displayedText.length + (isDeleting ? -1 : 1))
-      );
-    }, typingSpeed);
-
-    return () => clearTimeout(timer);
-  }, [displayedText, isDeleting, titleIndex]);
-
-  const techBadges = [
-    'Next.js 16',
-    'React 19',
-    'TypeScript',
-    'Node.js',
-    'Python',
-    'Prisma ORM',
-    'Tailwind CSS',
-    'MySQL',
-    'OpenAI API',
-  ];
+export const Hero: React.FC<HeroProps> = ({
+  onOpenResume,
+  isShortlisted,
+  onShortlistClick,
+}) => {
+  const [selectedRoleIndex, setSelectedRoleIndex] = useState(0);
+  const currentPitch = ROLE_PITCHES[selectedRoleIndex];
 
   return (
-    <section className="relative pt-28 pb-16 lg:pt-36 lg:pb-24 overflow-hidden">
-      {/* Background Ambient Glow Orbs */}
-      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[550px] h-[550px] bg-gradient-to-tr from-indigo-600/20 via-purple-600/15 to-cyan-500/10 blur-[130px] rounded-full pointer-events-none -z-10" />
-      <div className="absolute top-1/3 -left-32 w-80 h-80 bg-blue-600/15 blur-[100px] rounded-full pointer-events-none -z-10" />
-      <div className="absolute bottom-10 -right-32 w-80 h-80 bg-purple-600/15 blur-[100px] rounded-full pointer-events-none -z-10" />
+    <section id="hero" className="relative pt-28 pb-16 lg:pt-34 lg:pb-24 overflow-hidden bg-grid-pattern">
+      {/* Ambient Cinema Glows */}
+      <div className="absolute top-20 left-1/3 -translate-x-1/2 w-[600px] h-[500px] bg-gradient-to-tr from-amber-500/15 via-indigo-600/15 to-purple-600/10 blur-[140px] rounded-full pointer-events-none -z-10" />
+      <div className="absolute bottom-10 right-10 w-96 h-96 bg-emerald-500/10 blur-[120px] rounded-full pointer-events-none -z-10" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
+        
+        {/* Top Editorial Dossier Banner */}
+        <div className="flex flex-wrap items-center justify-between gap-3 pb-6 mb-8 border-b border-slate-200/80 dark:border-slate-800/80 text-xs font-mono">
+          <div className="flex items-center gap-2.5">
+            <span className="px-2.5 py-1 rounded-md bg-amber-500/15 text-amber-600 dark:text-amber-400 border border-amber-500/30 font-bold">
+              CHAPTER 00 // PROLOGUE
+            </span>
+            <span className="text-slate-500 dark:text-slate-400 hidden sm:inline">
+              CANDIDATE DOSSIER: HRITIK KUMAR • B.Sc. PHYSICS (1st DIV) → FULL-STACK ENGINEER
+            </span>
+          </div>
+
+          <div className="flex items-center gap-2 text-emerald-600 dark:text-emerald-400 font-semibold">
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+            </span>
+            <span>Open for Immediate Interviews ({PERSONAL_INFO.location})</span>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-start">
           
-          {/* Left Column: Introduction & CTAs */}
+          {/* Left Column: Storytelling Narrative & Role-Lens Switcher */}
           <div className="lg:col-span-7 text-left space-y-6">
             
-            {/* Status Pill */}
-            <div className="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-slate-900/90 dark:bg-slate-900/90 border border-slate-700/70 dark:border-slate-800 text-xs text-slate-300 shadow-sm backdrop-blur-md">
-              <span className="relative flex h-2.5 w-2.5">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
-              </span>
-              <span className="font-medium text-slate-200">
-                {PERSONAL_INFO.status}
-              </span>
+            {/* Editorial Headline */}
+            <div className="space-y-3">
+              <p className="font-editorial italic text-xl sm:text-2xl text-amber-600 dark:text-amber-400">
+                “Most developers only see syntax. Physics taught me how systems behave under pressure.”
+              </p>
+              
+              <h1 className="text-3xl sm:text-5xl lg:text-[52px] font-extrabold tracking-tight text-slate-900 dark:text-white leading-[1.12]">
+                Hi, I’m <span className="gradient-text">Hritik Kumar</span>.{' '}
+                <span className="block mt-1 text-slate-800 dark:text-slate-200">
+                  I engineer software that survives real-world scale.
+                </span>
+              </h1>
             </div>
 
-            {/* Main Headline */}
-            <div className="space-y-2">
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-slate-900 dark:text-white leading-[1.15]">
-                Hi, I'm <span className="gradient-text">{PERSONAL_INFO.displayName}</span>
-              </h1>
-              
-              {/* Typewriter Subtitle */}
-              <div className="h-10 sm:h-12 flex items-center">
-                <span className="text-xl sm:text-2xl lg:text-3xl font-bold text-slate-700 dark:text-slate-300 font-mono">
-                  {displayedText}
-                  <span className="inline-block w-0.5 h-6 sm:h-8 ml-1 bg-indigo-500 animate-pulse align-middle"></span>
+            {/* Interactive Hiring Manager Role-Lens Switcher */}
+            <div className="p-5 sm:p-6 rounded-3xl bg-white/90 dark:bg-slate-900/90 border-2 border-indigo-500/30 dark:border-indigo-500/40 shadow-xl shadow-indigo-950/10 space-y-4">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-200/80 dark:border-slate-800 pb-3">
+                <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-indigo-600 dark:text-indigo-400">
+                  <Target className="w-4 h-4 text-amber-500" />
+                  <span>Interviewer Lens: What role are you hiring for?</span>
+                </div>
+                <span className="text-[11px] font-mono px-2.5 py-0.5 rounded-full bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30 font-semibold self-start sm:self-auto">
+                  {currentPitch.badge}
                 </span>
               </div>
+
+              {/* Role Selector Pills */}
+              <div className="flex flex-wrap gap-1.5">
+                {ROLE_PITCHES.map((pitch, idx) => (
+                  <button
+                    key={pitch.id}
+                    onClick={() => setSelectedRoleIndex(idx)}
+                    className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
+                      selectedRoleIndex === idx
+                        ? 'bg-indigo-600 text-white shadow-md shadow-indigo-500/25'
+                        : 'bg-slate-100 dark:bg-slate-800/90 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700'
+                    }`}
+                  >
+                    {pitch.label}
+                  </button>
+                ))}
+              </div>
+
+              {/* Dynamic Pitch Content */}
+              <div className="space-y-3 pt-1">
+                <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-white leading-snug">
+                  “{currentPitch.headline}”
+                </h2>
+                <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+                  {currentPitch.subheadline}
+                </p>
+
+                {/* Proof Callout Bar */}
+                <div className="p-3 rounded-2xl bg-amber-500/10 border border-amber-500/25 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                  <div className="flex items-start sm:items-center gap-2 text-xs">
+                    <Zap className="w-4 h-4 text-amber-500 shrink-0 mt-0.5 sm:mt-0" />
+                    <div>
+                      <span className="font-bold text-slate-900 dark:text-amber-300">
+                        {currentPitch.proofMetric}:
+                      </span>{' '}
+                      <span className="text-slate-700 dark:text-slate-300">
+                        {currentPitch.proofDetail}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Matched Stack Pills */}
+                <div className="flex flex-wrap items-center gap-1.5 pt-1">
+                  <span className="text-[11px] font-mono text-slate-400 mr-1">Matched Stack:</span>
+                  {currentPitch.matchedSkills.map((skill) => (
+                    <span
+                      key={skill}
+                      className="px-2 py-0.5 rounded-md text-[11px] font-mono font-medium bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 border border-slate-200 dark:border-slate-700"
+                    >
+                      {skill}
+                    </span>
+                  ))}
+                </div>
+              </div>
             </div>
 
-            {/* Description */}
-            <p className="text-base sm:text-lg text-slate-600 dark:text-slate-300 leading-relaxed max-w-2xl">
-              I develop modern, high-performance web applications, dynamic reporting engines, and AI-driven platforms. Backed by a strong analytical background in Physics and production experience with enterprise data systems, I turn complex challenges into scalable, elegant software.
-            </p>
-
-            {/* Location & Quick Meta */}
-            <div className="flex flex-wrap items-center gap-4 text-xs sm:text-sm text-slate-500 dark:text-slate-400 font-medium pt-1">
-              <div className="flex items-center gap-1.5">
-                <MapPin className="w-4 h-4 text-rose-500" />
-                <span>{PERSONAL_INFO.location}</span>
-              </div>
-              <div className="w-1 h-1 rounded-full bg-slate-400"></div>
-              <div className="flex items-center gap-1.5">
-                <Mail className="w-4 h-4 text-indigo-400" />
-                <a href={`mailto:${PERSONAL_INFO.email}`} className="hover:underline">{PERSONAL_INFO.email}</a>
-              </div>
-            </div>
-
-            {/* CTA Buttons */}
-            <div className="flex flex-wrap items-center gap-3.5 pt-2">
-              <a
-                href="#projects"
-                className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl font-semibold text-sm bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white shadow-lg shadow-indigo-500/25 hover:shadow-indigo-500/40 hover:-translate-y-0.5 transition-all"
+            {/* Primary Interviewer Conversion CTAs */}
+            <div className="flex flex-wrap items-center gap-3.5 pt-1">
+              <button
+                onClick={onShortlistClick}
+                className={`inline-flex items-center gap-2 px-6 py-3.5 rounded-2xl font-bold text-sm transition-all cursor-pointer shadow-lg hover:-translate-y-0.5 ${
+                  isShortlisted
+                    ? 'bg-emerald-600 text-white shadow-emerald-500/25'
+                    : 'bg-gradient-to-r from-amber-500 via-orange-500 to-indigo-600 hover:from-amber-400 hover:to-indigo-500 text-white shadow-amber-500/25'
+                }`}
               >
-                <span>View Projects</span>
-                <ArrowRight className="w-4 h-4" />
-              </a>
+                {isShortlisted ? (
+                  <>
+                    <CheckCircle2 className="w-4 h-4" />
+                    <span>Resume Shortlisted (Memo Copied!)</span>
+                  </>
+                ) : (
+                  <>
+                    <Sparkles className="w-4 h-4" />
+                    <span>Shortlist My Resume (1-Click Kit)</span>
+                  </>
+                )}
+              </button>
 
               <button
                 onClick={onOpenResume}
-                className="inline-flex items-center gap-2 px-5 py-3.5 rounded-xl font-semibold text-sm bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200 border border-slate-300 dark:border-slate-800 hover:border-indigo-500/60 hover:text-indigo-600 dark:hover:text-indigo-400 shadow-sm hover:shadow-md transition-all hover:-translate-y-0.5 cursor-pointer"
+                className="inline-flex items-center gap-2 px-5 py-3.5 rounded-2xl font-semibold text-sm bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-100 border border-slate-300 dark:border-slate-800 hover:border-amber-500/60 transition-all hover:-translate-y-0.5 cursor-pointer shadow-sm"
               >
-                <FileText className="w-4 h-4 text-indigo-500" />
-                <span>Resume / CV</span>
+                <FileText className="w-4 h-4 text-amber-500" />
+                <span>View 1-Page ATS Resume</span>
               </button>
 
               <a
-                href="#contact"
-                className="inline-flex items-center gap-2 px-5 py-3.5 rounded-xl font-semibold text-sm bg-slate-100 dark:bg-slate-800/80 text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white border border-slate-200 dark:border-slate-700/60 transition-all hover:-translate-y-0.5"
+                href="#story"
+                className="inline-flex items-center gap-1.5 px-4 py-3.5 rounded-2xl font-semibold text-sm text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-colors"
               >
-                <span>Contact Me</span>
+                <span>Read My Story</span>
+                <ArrowDownRight className="w-4 h-4 text-amber-500" />
               </a>
             </div>
 
-            {/* Social Links */}
-            <div className="flex items-center gap-3 pt-3">
-              <span className="text-xs uppercase tracking-wider font-semibold text-slate-400 dark:text-slate-500 mr-1">
-                Connect:
-              </span>
-              
-              <a
-                href={PERSONAL_INFO.github}
-                target="_blank"
-                rel="noreferrer"
-                className="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 hover:text-white hover:bg-slate-900 dark:hover:bg-indigo-600 hover:border-transparent transition-all shadow-sm"
-                title="GitHub Profile"
-              >
-                <GithubIcon className="w-4 h-4" />
-              </a>
+            {/* Direct Contact Strip */}
+            <div className="flex flex-wrap items-center gap-4 pt-2 text-xs text-slate-500 dark:text-slate-400">
+              <div className="flex items-center gap-2">
+                <a
+                  href={PERSONAL_INFO.github}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="p-2 rounded-xl bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:text-white hover:bg-indigo-600 transition-colors"
+                  title="GitHub"
+                >
+                  <GithubIcon className="w-4 h-4" />
+                </a>
+                <a
+                  href={PERSONAL_INFO.linkedin}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="p-2 rounded-xl bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:text-white hover:bg-[#0077b5] transition-colors"
+                  title="LinkedIn"
+                >
+                  <LinkedinIcon className="w-4 h-4" />
+                </a>
+                <a
+                  href={PERSONAL_INFO.whatsapp}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="p-2 rounded-xl bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:text-white hover:bg-emerald-600 transition-colors"
+                  title="WhatsApp Direct"
+                >
+                  <PhoneCall className="w-4 h-4" />
+                </a>
+              </div>
 
-              <a
-                href={PERSONAL_INFO.linkedin}
-                target="_blank"
-                rel="noreferrer"
-                className="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 hover:text-white hover:bg-[#0077b5] hover:border-transparent transition-all shadow-sm"
-                title="LinkedIn Profile"
-              >
-                <LinkedinIcon className="w-4 h-4" />
-              </a>
+              <div className="h-4 w-[1px] bg-slate-300 dark:bg-slate-800 hidden sm:block" />
 
-              <a
-                href={`mailto:${PERSONAL_INFO.email}`}
-                className="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 hover:text-white hover:bg-rose-600 hover:border-transparent transition-all shadow-sm"
-                title="Send Direct Email"
-              >
-                <Mail className="w-4 h-4" />
-              </a>
+              <div className="flex items-center gap-1.5 font-mono">
+                <Mail className="w-3.5 h-3.5 text-amber-500" />
+                <a href={`mailto:${PERSONAL_INFO.email}`} className="hover:underline">
+                  {PERSONAL_INFO.email}
+                </a>
+              </div>
 
-              <a
-                href={PERSONAL_INFO.whatsapp}
-                target="_blank"
-                rel="noreferrer"
-                className="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 hover:text-white hover:bg-emerald-600 hover:border-transparent transition-all shadow-sm"
-                title="Direct WhatsApp Message"
-              >
-                <PhoneCall className="w-4 h-4" />
-              </a>
-            </div>
-
-            {/* Tech Badges Horizontal Strip */}
-            <div className="pt-2">
-              <div className="flex flex-wrap items-center gap-1.5">
-                <span className="text-xs text-slate-400 dark:text-slate-500 font-medium mr-1.5">
-                  Core Stack:
-                </span>
-                {techBadges.map((badge) => (
-                  <span
-                    key={badge}
-                    className="px-2.5 py-1 rounded-lg text-xs font-mono font-medium bg-slate-100 dark:bg-slate-900/90 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-800 hover:border-indigo-500/50 hover:text-indigo-500 transition-colors"
-                  >
-                    {badge}
-                  </span>
-                ))}
+              <div className="flex items-center gap-1.5 font-mono">
+                <MapPin className="w-3.5 h-3.5 text-rose-500" />
+                <span>{PERSONAL_INFO.phoneDisplay}</span>
               </div>
             </div>
 
           </div>
 
-          {/* Right Column: Live Interactive Developer Terminal */}
-          <div className="lg:col-span-5 flex justify-center lg:justify-end">
-            <div className="w-full">
-              <TerminalWidget />
+          {/* Right Column: Live Interviewer Evaluation Console */}
+          <div className="lg:col-span-5 flex flex-col justify-center lg:justify-end space-y-4">
+            <TerminalWidget />
+
+            {/* Subtle Interviewer Tip below console */}
+            <div className="p-3.5 rounded-2xl bg-slate-100/80 dark:bg-slate-900/60 border border-slate-200/80 dark:border-slate-800/80 flex items-center justify-between text-xs">
+              <span className="text-slate-600 dark:text-slate-400">
+                ⏱️ Short on time? Jump straight to the <strong className="text-slate-900 dark:text-white">60-Second Interview Room</strong>
+              </span>
+              <a
+                href="#shortlist"
+                className="px-3 py-1 rounded-lg bg-indigo-600/15 text-indigo-600 dark:text-indigo-400 font-semibold hover:bg-indigo-600 hover:text-white transition-colors shrink-0 ml-2"
+              >
+                Jump ↓
+              </a>
             </div>
           </div>
 
         </div>
 
-        {/* Stats Strip */}
-        <div className="mt-16 pt-8 border-t border-slate-200/80 dark:border-slate-800/80 grid grid-cols-2 md:grid-cols-4 gap-6">
+        {/* Evidence Metrics Bar */}
+        <div className="mt-14 pt-8 border-t border-slate-200/80 dark:border-slate-800/80 grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
           {STATS.map((stat, idx) => (
             <div 
               key={idx}
-              className="p-4 rounded-2xl bg-slate-50/50 dark:bg-slate-900/40 border border-slate-200/60 dark:border-slate-800/60 text-center hover:border-indigo-500/40 transition-all hover:-translate-y-0.5"
+              className="p-5 rounded-2xl bg-white/80 dark:bg-slate-900/50 border border-slate-200/80 dark:border-slate-800/80 text-left hover:border-amber-500/40 transition-all"
             >
-              <div className="text-3xl sm:text-4xl font-extrabold gradient-text font-mono mb-1">
+              <div className="text-2xl sm:text-3xl font-extrabold gradient-text font-mono">
                 {stat.value}
               </div>
-              <div className="text-xs sm:text-sm font-medium text-slate-600 dark:text-slate-400">
+              <div className="text-sm font-bold text-slate-900 dark:text-white mt-1">
                 {stat.label}
+              </div>
+              <div className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                {stat.detail}
               </div>
             </div>
           ))}
